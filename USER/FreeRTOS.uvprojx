@@ -338,7 +338,7 @@
               <MiscControls></MiscControls>
               <Define>STM32F10X_HD,USE_STDPERIPH_DRIVER</Define>
               <Undefine></Undefine>
-              <IncludePath>..\USER;..\CORE;..\STM32F10x_FWLib\inc;..\SYSTEM\delay;..\SYSTEM\sys;..\SYSTEM\usart;..\HARDWARE\LED;..\FreeRTOS\include;..\FreeRTOS\portable\RVDS\ARM_CM3;..\MALLOC;..\HARDWARE\TIMER;..\HARDWARE\ADC;..\HARDWARE\PID;..\HARDWARE\KEY</IncludePath>
+              <IncludePath>..\USER;..\CORE;..\STM32F10x_FWLib\inc;..\SYSTEM\delay;..\SYSTEM\sys;..\SYSTEM\usart;..\HARDWARE\LED;..\FreeRTOS\include;..\FreeRTOS\portable\RVDS\ARM_CM3;..\MALLOC;..\HARDWARE\TIMER;..\HARDWARE\ADC;..\HARDWARE\PID;..\HARDWARE\KEY;..\HARDWARE\HMI</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -426,6 +426,11 @@
               <FileName>key.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\HARDWARE\KEY\key.c</FilePath>
+            </File>
+            <File>
+              <FileName>HMI.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\HARDWARE\HMI\HMI.c</FilePath>
             </File>
           </Files>
         </Group>

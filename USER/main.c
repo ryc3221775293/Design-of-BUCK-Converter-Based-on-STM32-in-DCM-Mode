@@ -3,6 +3,7 @@
 #include "usart.h"
 #include "led.h"
 #include "key.h"
+#include "HMI.h"
 #include "timer.h"
 #include "adc.h"
 #include "pid.h"
@@ -28,7 +29,7 @@ TaskHandle_t StartTask_Handler;
 void start_task(void *pvParameters);
 
 //任务优先级
-#define ADC_TASK_PRIO		2
+#define ADC_TASK_PRIO		3
 //任务堆栈大小	
 #define ADC_STK_SIZE 		256  
 //任务句柄
@@ -37,9 +38,9 @@ TaskHandle_t ADCTask_Handler;
 void adc_task(void *pvParameters);
 
 //任务优先级
-#define KEYPROCESS_TASK_PRIO 3
+#define KEYPROCESS_TASK_PRIO 2
 //任务堆栈大小	 
-#define KEYPROCESS_STK_SIZE  256 
+#define KEYPROCESS_STK_SIZE  128 
 //任务句柄
 TaskHandle_t Keyprocess_Handler;
 //任务函数
@@ -89,11 +90,11 @@ int main(void)
 {
 	NVIC_PriorityGroupConfig(NVIC_PriorityGroup_4);//设置系统中断优先级分组4	 
 	delay_init();	    				//延时函数初始化	 
-	uart_init(115200);					//初始化串口
+	uart_init(9600);					//初始化串口
 	LED_Init();
 	PID_init();
 	KEY_Init();
-	TIM3_PWM_Init(899,0);	 //不分频。PWM频率=72000000/900=80Khz
+	TIM3_PWM_Init(7200,0);	 //不分频。PWM频率=72000000/900=80Khz
 	Adc_Init();		  		//ADC初始化	
 	my_mem_init(SRAMIN);            	//初始化内部内存池
 	
@@ -145,17 +146,21 @@ void start_task(void *pvParameters)
 //ADC任务函数
 void adc_task(void *pvParameters)
 {
-	u16 adcx;
+	u16 adcx,flo;
+	
 	BaseType_t err;
 	while(1)
 	{
 		adcx=Get_Adc_Average(ADC_Channel_1,10);	
+		flo = (int)adcx*3.3*50/4096;
+		CurveCommand(1,0,flo);
+		//NumberCommand(i);
 		if ((Message_Queue!=NULL) && (adcx))
 		{
 			err=xQueueSend(Message_Queue,&adcx,10);
             if(err==errQUEUE_FULL)   	//发送按键值
             {
-                printf("队列Message_Queue已满，数据发送失败!\r\n");
+                //printf("队列Message_Queue已满，数据发送失败!\r\n");
             }
 		}
 		vTaskDelay(10);                           //延时10ms，也就是10个时钟节拍	
@@ -183,12 +188,14 @@ void Keyprocess_task(void *pvParameters)
 				pwm -= 100;
 				break;
 		}
+		NumberCommand(0,(int)pwm*100/7200);
+		NumberCommand(1,(int)pwm*15/7200);
 		if((Key_Queue!=NULL)&&(pwm!=0))   	//消息队列Key_Queue创建成功,并且按键被按下
         {
             err=xQueueSend(Key_Queue,&pwm,10);
             if(err==errQUEUE_FULL)   	//发送按键值
             {
-                printf("队列Key_Queue已满，数据发送失败!\r\n");
+                //printf("队列Key_Queue已满，数据发送失败!\r\n");
             }
         }
 		vTaskDelay(10);                           //延时10ms，也就是10个时钟节拍	
@@ -208,8 +215,10 @@ void pid_task(void *pvParameters)
             if(xQueueReceive(Message_Queue,&adcx,portMAX_DELAY) && xQueueReceive(Key_Queue,&pwm,portMAX_DELAY))//请求消息Message_Queue和Key_Queue
             {
 				V_PID.setpulse = pwm;
-				V_PID.backpulse =adcx;		//电压反馈值
-				TIM_SetCompare2(TIM3,V_PIDCalc(&V_PID)+3600);
+				V_PID.backpulse = adcx;		//电压反馈值
+				//printf("pwm=%d,adcx=%d\r\n",V_PID.setpulse,V_PID.backpulse);
+				TIM_SetCompare2(TIM3,V_PIDCalc(&V_PID));
+				//printf("PID result=%d\r\n",V_PIDCalc(&V_PID));
 			}
 		}
 		vTaskDelay(10);      //延时10ms，也就是10个时钟节拍

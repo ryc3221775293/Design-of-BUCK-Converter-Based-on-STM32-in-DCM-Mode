@@ -94,7 +94,7 @@ int main(void)
 	LED_Init();
 	PID_init();
 	KEY_Init();
-	TIM3_PWM_Init(7200,0);	 //不分频。PWM频率=72000000/900=80Khz
+	TIM3_PWM_Init(1439,0);	 //不分频。PWM频率=72000000/1440=50Khz
 	Adc_Init();		  		//ADC初始化	
 	my_mem_init(SRAMIN);            	//初始化内部内存池
 	
@@ -179,17 +179,21 @@ void Keyprocess_task(void *pvParameters)
 		switch(key)
 		{
 			case WKUP_PRES:		//KEY_UP控制LED1
-				pwm += 100;
+				pwm += 90;
 				break;
 			case KEY1_PRES:		//KEY1控制蜂鸣器
-				pwm += 200;
+				pwm += 180;
 				break;
 			case KEY0_PRES:		//KEY0刷新LCD背景
-				pwm -= 100;
+				pwm -= 90;
 				break;
 		}
-		NumberCommand(0,(int)pwm*100/7200);
-		NumberCommand(1,(int)pwm*15/7200);
+		if (pwm>1440)
+		{
+			pwm = 1440;
+		}
+		NumberCommand(0,(int)pwm*100/1440);
+		NumberCommand(1,(int)pwm*15/1440);
 		if((Key_Queue!=NULL)&&(pwm!=0))   	//消息队列Key_Queue创建成功,并且按键被按下
         {
             err=xQueueSend(Key_Queue,&pwm,10);

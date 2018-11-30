@@ -1,0 +1,10 @@
+Output: Protel
+Type  : ProtelNetlist
+From  : Project [Drive_Circuit.PrjPcb]
+   Generated File[Drive_Circuit.NET]
+
+
+Files Generated   : 1
+Documents Printed : 0
+
+Finished Output Generation At 22:04:35 On 2018/11/30

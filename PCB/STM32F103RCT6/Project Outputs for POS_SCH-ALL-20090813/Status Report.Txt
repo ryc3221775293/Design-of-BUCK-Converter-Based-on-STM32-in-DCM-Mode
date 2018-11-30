@@ -1,0 +1,10 @@
+Output: Protel
+Type  : ProtelNetlist
+From  : Project [MINI-STM32.PRJPCB]
+   Generated File[MINI-STM32.NET]
+
+
+Files Generated   : 1
+Documents Printed : 0
+
+Finished Output Generation At 20:43:08 On 2018/11/29

@@ -55,8 +55,8 @@ TaskHandle_t PID_Handler;
 //任务函数
 void pid_task(void *pvParameters);
 
-#define KEYMSG_Q_NUM    4  		//按键消息队列的数量 
-#define MESSAGE_Q_NUM   4   	//发送数据的消息队列的数量
+#define KEYMSG_Q_NUM    20  		//按键消息队列的数量 
+#define MESSAGE_Q_NUM   20   	//发送数据的消息队列的数量
 QueueHandle_t Key_Queue;   		//按键值消息队列句柄
 QueueHandle_t Message_Queue;	//信息队列句柄
 
@@ -218,11 +218,12 @@ void pid_task(void *pvParameters)
         {
             if(xQueueReceive(Message_Queue,&adcx,portMAX_DELAY) && xQueueReceive(Key_Queue,&pwm,portMAX_DELAY))//请求消息Message_Queue和Key_Queue
             {
+				//闭环
 				V_PID.setpulse = pwm;
 				V_PID.backpulse = adcx;		//电压反馈值
-				//printf("pwm=%d,adcx=%d\r\n",V_PID.setpulse,V_PID.backpulse);
 				TIM_SetCompare2(TIM3,V_PIDCalc(&V_PID));
-				//printf("PID result=%d\r\n",V_PIDCalc(&V_PID));
+				//开环
+				//TIM_SetCompare2(TIM3,pwm);
 			}
 		}
 		vTaskDelay(10);      //延时10ms，也就是10个时钟节拍

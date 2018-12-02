@@ -1,0 +1,21 @@
+﻿Field=#~Integer~#~50|Field=Comment~String~Comment~100|Field=Description~String~Description~100|Field=Designator~String~Designator~100|Field=Footprint~String~Footprint~100|Field=LibRef~String~LibRef~100|Field=Quantity~Integer~Quantity~100|ReportField=Currency~<none>|ReportField=ProductionQuantity~1|ReportField=ProjectFileName~BUCK.PrjPcb|ReportField=ProjectFullPath~F:\三级项目\计算机控制技术课程设计\Design-of-BUCK-Converter-Based-on-STM32-in-DCM-Mode\PCB\BUCK\BUCK.PrjPcb|ReportField=Title~Bill of Materials For Project [BUCK.PrjPcb] (No PCB Document Selected)|ReportField=TotalQuantity~37|ReportField=ReportTime~19:43:28|ReportField=ReportDate~2018/12/2|ReportField=ReportDateTime~2018/12/2 19:43:28|ReportField=OutputName~Bill of Materials|ReportField=OutputType~BOM_PartType|ReportField=GeneratorName~BOM|ReportField=GeneratorDescription~Bill of Materials|ReportField=VariantName~None|ReportField=Address1~|ReportField=Address2~|ReportField=Address3~|ReportField=Address4~|ReportField=Application_BuildNumber~|ReportField=ApprovedBy~|ReportField=Author~|ReportField=CheckedBy~|ReportField=CompanyName~|ReportField=CurrentDate~2018/12/2|ReportField=CurrentTime~19:41:39|ReportField=Date~|ReportField=DocumentFullPathAndName~F:\三级项目\计算机控制技术课程设计\Design-of-BUCK-Converter-Based-on-STM32-in-DCM-Mode\PCB\BUCK\BUCK.SchDoc|ReportField=DocumentName~BUCK.SchDoc|ReportField=DocumentNumber~|ReportField=DrawnBy~|ReportField=Engineer~|ReportField=ImagePath~|ReportField=ModifiedDate~2018/12/1|ReportField=Organization~|ReportField=ProjectName~BUCK.PrjPcb|ReportField=Revision~|ReportField=Rule~|ReportField=SheetNumber~|ReportField=SheetTotal~|ReportField=Time~|ReportField=Title~|ReportField=DataSourceFileName~BUCK.PrjPcb|ReportField=DataSourceFullPath~F:\三级项目\计算机控制技术课程设计\Design-of-BUCK-Converter-Based-on-STM32-in-DCM-Mode\PCB\BUCK\BUCK.PrjPcb|ReportField=PCBConfigurationName~Sources|ReportField=Item~|ReportField=ItemRevision~|ReportField=ItemAndRevision~|ReportField=ItemRevisionBase~|ReportField=ItemRevisionLevel1~|ReportField=ItemRevisionLevel2~|ReportField=ItemRevisionLevel1AndBase~|ReportField=ItemRevisionLevel2AndLevel1~
+1|1000uF/63V|直插电解电容|C1, C2, C5|CAP 1.5*4*8|C-CAP|3
+2|335J/100V|无极性贴片电容|C3, C4|C 0805|C|2
+3|4700uF/50V|直插电解电容|C6|CAP 1.5*4*8|C-CAP|1
+4|470uF/35V|直插电解电容|C7|CAP 1.5*4*8|C-CAP|1
+5|100uF/25V|直插电解电容|C8|CAP 1.5*4*8|C-CAP|1
+6|1N4007|整流二极管|D1, D2|DO-41|1N4007|2
+7|10A/250V|5*20保险丝|F1|FU 5x20|FU 5x20|1
+8|HDR-1X2|2P接插件|J1, J3|PH2.0 D-L-2P|Header 2|2
+9|HDR-1X3|3P接插件|J2|PH2.0 D-L-3P|Header 3|1
+10|HDR-1X8|8P接插件|JLoad|KF2EDGK5.08-8P|Header 8|1
+11|HDR-1X4|4P接插件|JPower|PH2.0 D-L-4P|Header 4|1
+12|100uH/10A|小功率贴片电感|L1|L 0805|L|1
+13|Green LED|贴片LED|LED1, LED2, LED3|LED 0805G|LED-SMD|3
+14|MOSFET-N|N-Channel MOSFET|Q1|TO220A|MOSFET-N|1
+15|0.01/3W|贴片电阻|R1, R2|R 0805|R|2
+16|10K/0.25W|贴片电阻|R3, R4, R7, R8, R9|R 0805|R|5
+17|10K/4W|贴片电阻|R5, R6|R 0805|R|2
+18|KCD2/16A/250VAC||S1, S2, S3, S4|KCD1-104-W|KCD2/16A/250VAC|4
+19|散热片|散热片|SR1, SR2|散热片|S1|2
+20|LT7815||U1|TO220A|LT7815|1

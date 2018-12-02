@@ -20,21 +20,21 @@ Cortex-M3采用目前主流ARM V7-M架构，相比曾风靡一时的ARM V4T架�
 
 #### MCU部分的原理图如图
 
-![MINI-STM32_页面_1](https://github.com/ryc3221775293/Design-of-BUCK-Converter-Based-on-STM32-in-DCM-Mode/tree/master/PCB/Image/MINI-STM32_页面_1.jpg)
+![MINI-STM32_页面_1](.\IMAGE\MINI-STM32_页面_1.jpg)
 
 
 
 #### PCB如图
 
-![MINI-STM32_页面_2](https://github.com/ryc3221775293/Design-of-BUCK-Converter-Based-on-STM32-in-DCM-Mode/tree/master/PCB/Image/MINI-STM32_页面_2.jpg)
+![MINI-STM32_页面_2](.\IMAGE\MINI-STM32_页面_2.jpg)
 
 #### PCB板的3D效果如图
 
-![STM32](https://github.com/ryc3221775293/Design-of-BUCK-Converter-Based-on-STM32-in-DCM-Mode/tree/master/PCB/Image/STM32.png)
+![STM32](.\IMAGE\STM32.png)
 
 #### BOM报表如下
 
-![MINI-STM32_页面_3](https://github.com/ryc3221775293/Design-of-BUCK-Converter-Based-on-STM32-in-DCM-Mode/tree/master/PCB/Image/MINI-STM32_页面_3.jpg)
+![MINI-STM32_页面_3](.\IMAGE\MINI-STM32_页面_3.jpg)
 
 上图中中上部的BOOT1用于设置STM32的启动方式，其对应启动模式如下表所示：
 
@@ -48,7 +48,7 @@ Cortex-M3采用目前主流ARM V7-M架构，相比曾风靡一时的ARM V4T架�
 
 #### JTAG部分电路如下图：
 
-![TIM截图20181202202550](https://github.com/ryc3221775293/Design-of-BUCK-Converter-Based-on-STM32-in-DCM-Mode/tree/master/PCB/Image/TIM截图20181202202550.png)
+![TIM截图20181202202550](.\IMAGE\TIM截图20181202202550.png)
 
 这里采用的是标准的JTAG接法，但是STM32还有SWD接口，SWD只需要最少2根线（SWCLK和SWDIO）就可以下载并调试代码了，这同我们使用串口下载代码差不多，而且速度更快，能调试。所以建议在设计产品的时候，可以留出SWD来下载调试代码，而摒弃JTAG。STM32的SWD接口与JTAG是共用的，只要接上JTAG，你就可以使用SWD模式了（其实SWD并不需要JTAG这么多线），JLINK V8/JLINKV7ULINK2以及STLINK等都支持SWD。这里，我们使用SWD模式。
 
@@ -56,7 +56,7 @@ Cortex-M3采用目前主流ARM V7-M架构，相比曾风靡一时的ARM V4T架�
 
 STM32开发板总共有3个按键，其原理图如下：
 
-![TIM截图20181202203009](https://github.com/ryc3221775293/Design-of-BUCK-Converter-Based-on-STM32-in-DCM-Mode/tree/master/PCB/Image/TIM截图20181202203009.png)
+![TIM截图20181202203009](.\IMAGE\TIM截图20181202203009.png)
 
 KEY0和KEY1用作普通按键输入，分别连接在PC1和PC13上，WKUP按键连接到PA0（STM32的WKUP引脚），它除了可以用作普通输入按键外，还可以用作STM32的唤醒输入。
 
@@ -64,27 +64,27 @@ KEY0和KEY1用作普通按键输入，分别连接在PC1和PC13上，WKUP按键�
 
 STM32开发板上总共有3个LED，其原理图如下：
 
-![2018-12-02_203312](https://github.com/ryc3221775293/Design-of-BUCK-Converter-Based-on-STM32-in-DCM-Mode/tree/master/PCB/Image/2018-12-02_203312.gif)
+![2018-12-02_203312](.\IMAGE\2018-12-02_203312.gif)
 
 其中D2是开发板电源指示灯。LED0和LED1分别接在PA8和PD2上，PA8还可以通过TIM1的通道1的PWM输出来控制D0的亮度。
 
 #### 无线模块
 STM32 开发板板载了NRF24L01无线模块的接口。该接口用来连接NRF24L01等2.4G无线模块，从而实现开发板与其他设备的无线数据传输（注意：NRF24L01不能和蓝牙/WIFI连接）。NRF24L01无线模块的最大传输速度可以达到2Mbps，传输距离最大可以到30米左右（空旷地，无干扰）。有了这个接口，我们就可以做无线通信，以及其他很多的相关应用了。这部分原理图如下：
 
-![TIM截图20181202203608](https://github.com/ryc3221775293/Design-of-BUCK-Converter-Based-on-STM32-in-DCM-Mode/tree/master/PCB/Image/TIM截图20181202203608.png)
+![TIM截图20181202203608](.\IMAGE\TIM截图20181202203608.png)
 
 #### SPI FLASH 
 
 STM32开发板载有SPIFLASH芯片W25Q64，该芯片的容量为8M字节，其原理图如下：
 
-![TIM截图20181202203720](https://github.com/ryc3221775293/Design-of-BUCK-Converter-Based-on-STM32-in-DCM-Mode/tree/master/PCB/Image/TIM截图20181202203720.png)
+![TIM截图20181202203720](.\IMAGE\TIM截图20181202203720.png)
 
 #### USB、电源
 开发板的供电部分还引出了5V（VOUT2）和3.3V（VOUT1）的排针，可以用来为外部设备提供电源或者从外部引入电源，这在很多时候是非常有用的，有时候你突然要一个3.3V的电源，但找半天就是没这样的电源，而我们的板子则可直接向外部提供3.3V电源，有了它，你就可以给外部设备提供3.3V、5V电源了。注意电流不能太大！
 开发板的USB接口（USB）通过独立的MiniUSB头引出，不和USB转串口（USB232）共用，这样不但可以同时使用，还可以给系统提供更大的电流。
 这几个部分的原理图如下：
 
-![TIM截图20181202203911](https://github.com/ryc3221775293/Design-of-BUCK-Converter-Based-on-STM32-in-DCM-Mode/tree/master/PCB/Image/TIM截图20181202203911.png)
+![TIM截图20181202203911](.\IMAGE\TIM截图20181202203911.png)
 
 ### 2、驱动电路
 
@@ -92,37 +92,37 @@ STM32开发板载有SPIFLASH芯片W25Q64，该芯片的容量为8M字节，其�
 
 #### 驱动电路原理图如下
 
-![Drive_Circuit_页面_1](https://github.com/ryc3221775293/Design-of-BUCK-Converter-Based-on-STM32-in-DCM-Mode/tree/master/PCB/Image/Drive_Circuit_页面_1.jpg)
+![Drive_Circuit_页面_1](.\IMAGE\Drive_Circuit_页面_1.jpg)
 
 #### PCB如下
 
-![Drive_Circuit_页面_2](https://github.com/ryc3221775293/Design-of-BUCK-Converter-Based-on-STM32-in-DCM-Mode/tree/master/PCB/Image/Drive_Circuit_页面_2.jpg)
+![Drive_Circuit_页面_2](.\IMAGE\Drive_Circuit_页面_2.jpg)
 
 #### 3D效果图如下
 
-![Drive](https://github.com/ryc3221775293/Design-of-BUCK-Converter-Based-on-STM32-in-DCM-Mode/tree/master/PCB/Image/Drive.png)
+![Drive](.\IMAGE\Drive.png)
 
 #### BOM报表如下
 
-![Drive_Circuit_页面_3](https://github.com/ryc3221775293/Design-of-BUCK-Converter-Based-on-STM32-in-DCM-Mode/tree/master/PCB/Image/Drive_Circuit_页面_3.jpg)
+![Drive_Circuit_页面_3](.\IMAGE\Drive_Circuit_页面_3.jpg)
 
 ### 3、主电路
 
 #### 主电路原理图如下
 
-![BUCK_页面_1](https://github.com/ryc3221775293/Design-of-BUCK-Converter-Based-on-STM32-in-DCM-Mode/tree/master/PCB/Image/BUCK_页面_1.jpg)
+![BUCK_页面_1](.\IMAGE\BUCK_页面_1.jpg)
 
 #### PCB如下
 
-![BUCK_页面_2](https://github.com/ryc3221775293/Design-of-BUCK-Converter-Based-on-STM32-in-DCM-Mode/tree/master/PCB/Image/BUCK_页面_2.jpg)
+![BUCK_页面_2](.\IMAGE\BUCK_页面_2.jpg)
 
 #### 3D效果图如下
 
-![BUCK](https://github.com/ryc3221775293/Design-of-BUCK-Converter-Based-on-STM32-in-DCM-Mode/tree/master/PCB/Image/BUCK.png)
+![BUCK](.\IMAGE\BUCK.png)
 
 #### BOM报表如下
 
-![BUCK_页面_3](https://github.com/ryc3221775293/Design-of-BUCK-Converter-Based-on-STM32-in-DCM-Mode/tree/master/PCB/Image/BUCK_页面_3.jpg)
+![BUCK_页面_3](.\IMAGE\BUCK_页面_3.jpg)
 
 ### 4、UART 串口屏幕
 
@@ -193,7 +193,7 @@ STM32开发板载有SPIFLASH芯片W25Q64，该芯片的容量为8M字节，其�
 
 #### 原理图如下
 
-![TJC3224T028_011X_页面_2](https://github.com/ryc3221775293/Design-of-BUCK-Converter-Based-on-STM32-in-DCM-Mode/tree/master/PCB/Image/TJC3224T028_011X_页面_2.jpg)
+![TJC3224T028_011X_页面_2](.\IMAGE\TJC3224T028_011X_页面_2.jpg)
 
 ## 二、软件部分
 
@@ -224,7 +224,7 @@ FreeRTOS是RTOS系统的一种，FreeRTOS十分的小巧，可以在资源有限
 
 7、社会占有量很高，EEtimes 统计的2015年RTOS系统占有量中FreeRTOS已经跃升至第一位，如图所示。
 
-![TIM截图20181202205637](https://github.com/ryc3221775293/Design-of-BUCK-Converter-Based-on-STM32-in-DCM-Mode/tree/master/PCB/Image/TIM截图20181202205637.png)
+![TIM截图20181202205637](.\IMAGE\TIM截图20181202205637.png)
 
 ### 3、FreeRTOS特点
 FreeRTOS是一个可裁剪的小型RTOS系统，其特点包括：
@@ -260,13 +260,13 @@ RTOS系统的核心就是任务管理，FreeRTOS也不例外，而且大多数�
 
 以前在使用51、AVR、STM32单片机裸机（未使用系统）的时候一般都是在main 函数里面用while（1）做一个大循环来完成所有的处理，即应用程序是一个无限的循环，循环中调用相应的函数完成所需的处理。有时候我们也需要中断中完成一些处理。相对于多任务系统而言，这个就是单任务系统，也称作前后台系统，中断服务函数作为前台程序，大循环while（1）作为后台程序，如图所示：
 
-![TIM截图20181202210433](https://github.com/ryc3221775293/Design-of-BUCK-Converter-Based-on-STM32-in-DCM-Mode/tree/master/PCB/Image/TIM截图20181202210433.png)
+![TIM截图20181202210433](.\IMAGE\TIM截图20181202210433.png)
 
 前后台系统的实时性差，前后台系统各个任务（应用程序）都是排队等着轮流执行，不管你这个程序现在有多紧急，没轮到你就只能等着！相当于所有任务（应用程序）的优先级都是一样的。但是前后台系统简单啊，资源消耗也少啊！在稍微大一点的嵌入式应用中前后台系统就明显力不从心了，此时就需要多任务系统出马了。
 
 多任务系统会把一个大问题（应用）“分而治之”，把大问题划分成很多个小问题，逐步的把小问题解决掉，大问题也就随之解决了，这些小问题可以单独的作为一个小任务来处理。这些小任务是并发处理的，注意，并不是说同一时刻一起执行很多个任务，而是由于每个任务执行的时间很短，导致看起来像是同一时刻执行了很多个任务一样。多个任务带来了一个新的问题，究竟哪个任务先运行，哪个任务后运行呢？完成这个功能的东西在RTOS系统中叫做任务调度器。不同的系统其任务调度器的实现方法也不同，比如FreeRTOS是一个抢占式的实时多任务系统，那么其任务调度器也是抢占式的，运行过程如图所示：
 
-![TIM截图20181202210706](https://github.com/ryc3221775293/Design-of-BUCK-Converter-Based-on-STM32-in-DCM-Mode/tree/master/PCB/Image/TIM截图20181202210706.png)
+![TIM截图20181202210706](.\IMAGE\TIM截图20181202210706.png)
 
 在图中，高优先级的任务可以打断低优先级任务的运行而取得CPU的使用权，这样就保证了那些紧急任务的运行。这样我们就可以为那些对实时性要求高的任务设置一个很高的优先级，比如自动驾驶中的障碍物检测任务等。高优先级的任务执行完成以后重新把CPU的使用权归还给低优先级的任务，这个就是抢占式多任务系统的基本原理。
 
@@ -322,7 +322,7 @@ FreeRTOS中的任务永远处于下面几个状态中的某一个：
   像阻塞态一样，任务进入挂起态以后也不能被调度器调用进入运行态，但是进入挂起态的任务没有超时时间。任务进入和退出挂起态通过调用函数vTaskSuspendO和xTaskResume0。
   任务状态之间的转换如图所示：
 
-![TIM截图20181202211151](https://github.com/ryc3221775293/Design-of-BUCK-Converter-Based-on-STM32-in-DCM-Mode/tree/master/PCB/Image/TIM截图20181202211151.png)
+![TIM截图20181202211151](.\IMAGE\TIM截图20181202211151.png)
 
 #### 任务优先级
 每个任务都可以分配一个从0~（configMAX_PRIORITIES-1）的优先级，configMAX_PRIORITIES 在文件FreeRTOSConfig.h中有定义，前面我们讲解 FreeRTOS系统配置的时候已经讲过了。如果所使用的硬件平台支持类似计算前导零这样的指令（可以通过该指令选择下一个要运行的任务，Cortex-M处理器是支持该指令的），并且宏configUSE_PORT_OPTIMISED_TASK_SELECTION 也设置为了1，那么宏configMAX_PRIORITIES不能超过32！也就是优先级不能超过32级。其他情况下宏configMAX_PRIORITIES可以为任意值，但是考虑到RAM的消耗，宏configMAX_PRIORITIES最好设置为一个满足应用的最小值。
@@ -376,25 +376,25 @@ FreeRTOS 之所以能正确的恢复一个任务的运行就是因为有任务�
 
 + 创建队列
 
-![TIM截图20181202212052](https://github.com/ryc3221775293/Design-of-BUCK-Converter-Based-on-STM32-in-DCM-Mode/tree/master/PCB/Image/TIM截图20181202212052.png)
+![TIM截图20181202212052](.\IMAGE\TIM截图20181202212052.png)
 
 图中任务A要向任务B发送消息，这个消息是x变量的值。首先创建一个队列，并且指定队列的长度和每条消息的长度。这里我们创建了一个长度为4的队列，因为要传递的是x值，而x是个int类型的变量，所以每条消息的长度就是int类型的长度，在STM32中就是4字节，即每条消息是4个字节的。
 
 + 向队列发送第一个消息
 
-![TIM截图20181202212159](https://github.com/ryc3221775293/Design-of-BUCK-Converter-Based-on-STM32-in-DCM-Mode/tree/master/PCB/Image/TIM截图20181202212159.png)
+![TIM截图20181202212159](.\IMAGE\TIM截图20181202212159.png)
 
 图中任务A的变量x值为10，将这个值发送到消息队列中。此时队列剩余长度就是3了。前面说了向队列中发送消息是采用拷贝的方式，所以一旦消息发送完成变量x就可以再次被使用，赋其他的值。
 
 + 向队列发送第二个消息
 
-![TIM截图20181202212249](https://github.com/ryc3221775293/Design-of-BUCK-Converter-Based-on-STM32-in-DCM-Mode/tree/master/PCB/Image/TIM截图20181202212249.png)
+![TIM截图20181202212249](.\IMAGE\TIM截图20181202212249.png)
 
 图中任务A又向队列发送了一个消息，即新的x的值，这里是20。此时队列剩余长度为2。
 
 + 从队列中读取消息
 
-![TIM截图20181202212402](https://github.com/ryc3221775293/Design-of-BUCK-Converter-Based-on-STM32-in-DCM-Mode/tree/master/PCB/Image/TIM截图20181202212402.png)
+![TIM截图20181202212402](.\IMAGE\TIM截图20181202212402.png)
 
 ### 6、代码解析
 

@@ -15,11 +15,11 @@
  
 /////////////////PID调节////////////////////////////////////////////////////
 #define  Pv  0.1  //0.6//0.1		     振荡 0.05	 振荡至稳定0.1		   
-#define  Iv  0.03//0.08					      0.04			   0.03		   
+#define  Iv  0.5//0.08					      0.04			   0.03		   
 #define  Dv  0
 
 
-#define D_MAX 2900
+#define D_MAX 620
 #define D_MIN 0 
 //定义PID
 typedef struct PID		

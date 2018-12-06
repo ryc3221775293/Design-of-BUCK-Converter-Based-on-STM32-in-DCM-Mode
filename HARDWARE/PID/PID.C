@@ -24,7 +24,7 @@ unsigned int V_PIDCalc( PID *pp )
     int error;
     
 	error = pp->setpulse - pp->backpulse;
-
+    //pp->motorout +=( int) (pp->P*error - pp->I*pp->last_error);
   	pp->motorout +=( int) (pp->P*(error-pp->last_error) + pp->I*error + pp->D*(error-2*pp->last_error+pp->pre_error));
  		
  	pp->pre_error = pp->last_error;	 

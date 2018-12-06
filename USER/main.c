@@ -152,7 +152,7 @@ void adc_task(void *pvParameters)
 	while(1)
 	{
 		adcx=Get_Adc_Average(ADC_Channel_1,10);	
-		flo = (int)adcx*3.3*50/4096;
+		flo = (int)adcx*134.3/4096; 
 		CurveCommand(1,0,flo);
 		//NumberCommand(i);
 		if ((Message_Queue!=NULL) && (adcx))
@@ -182,10 +182,10 @@ void Keyprocess_task(void *pvParameters)
 				pwm += 90;
 				break;
 			case KEY1_PRES:		//KEY1控制蜂鸣器
-				pwm += 180;
+				pwm += 10;
 				break;
 			case KEY0_PRES:		//KEY0刷新LCD背景
-				pwm -= 90;
+				pwm = 556;
 				break;
 		}
 		if (pwm>1440)
@@ -193,7 +193,7 @@ void Keyprocess_task(void *pvParameters)
 			pwm = 1440;
 		}
 		NumberCommand(0,(int)pwm*100/1440);
-		NumberCommand(1,(int)pwm*15/1440);
+		NumberCommand(1,(int)pwm*24/1440);
 		if((Key_Queue!=NULL)&&(pwm!=0))   	//消息队列Key_Queue创建成功,并且按键被按下
         {
             err=xQueueSend(Key_Queue,&pwm,10);
@@ -219,11 +219,13 @@ void pid_task(void *pvParameters)
             if(xQueueReceive(Message_Queue,&adcx,portMAX_DELAY) && xQueueReceive(Key_Queue,&pwm,portMAX_DELAY))//请求消息Message_Queue和Key_Queue
             {
 				//闭环
-				V_PID.setpulse = pwm;
-				V_PID.backpulse = adcx;		//电压反馈值
-				TIM_SetCompare2(TIM3,V_PIDCalc(&V_PID));
+				V_PID.setpulse = pwm*4096/1440;
+				V_PID.backpulse = adcx/2;		//电压反馈值
+				PWM_VAL1=V_PIDCalc(&V_PID);
+				PWM_VAL2=V_PIDCalc(&V_PID);
 				//开环
-				//TIM_SetCompare2(TIM3,pwm);
+				//PWM_VAL1=pwm;
+				//PWM_VAL2=pwm;
 			}
 		}
 		vTaskDelay(10);      //延时10ms，也就是10个时钟节拍

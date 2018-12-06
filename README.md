@@ -1,16 +1,14 @@
 # 基于STM32的DCM模式下的BUCK变换器设计
 
-+ 本工程包括软件部分的STM32的代码以及硬件部分的Altium Designer设计的PCB
-
-+ STM32使用STM32F103RCT6并移植FreeRTOS操作系统，进行按键任务、ADC任务、PWM生成任务、PID任务的调度管理
-
-+ PCB包括控制电路STM32，驱动电路以及主电路BUCK电路
+- 本工程包括软件部分的STM32的代码以及硬件部分的Altium Designer设计的PCB
+- STM32使用STM32F103RCT6并移植FreeRTOS操作系统，进行按键任务、ADC任务、PWM生成任务、PID任务的调度管理
+- PCB包括控制电路STM32，驱动电路以及主电路BUCK电路
 
 下面就两部分进行介绍：
 
-## 一、硬件部分
+## 5、硬件部分
 
-### 1、STM32F103RCT6控制电路
+### 5.1、STM32F103RCT6控制电路
 
 Cortex-M3采用目前主流ARM V7-M架构，相比曾风靡一时的ARM V4T架构拥有更加强劲的性能，更高的代码密度，更高的性价比。Cortex-M3处理器结合多种突破性技术，在低功耗、低成本、高性能三方面具有突破性的创新，使其在这几年迅速在中低端单片机市场异军突起。
 
@@ -18,21 +16,21 @@ Cortex-M3采用目前主流ARM V7-M架构，相比曾风靡一时的ARM V4T架�
 
 开发板选择的是STM32F103RCT6作为MCU，它拥有的资源包括：48KBSRAM、256KBFLASH、2个基本定时器、4个通用定时器、2个高级定时器、2个DMA控制器（共12个通道）、3个SPI、2个IIC、5个串口、1个USB、1个CAN、3个12位ADC、1个12位DAC、1个SDIO接口及51个通用IO口。该芯片性价比极高。
 
-#### MCU部分的原理图如图
+#### 5.1.1 MCU部分的原理图如图
 
 ![MINI-STM32_页面_1](.\IMAGE\MINI-STM32_页面_1.jpg)
 
 
 
-#### PCB如图
+#### 5.1.2 PCB如图
 
 ![MINI-STM32_页面_2](.\IMAGE\MINI-STM32_页面_2.jpg)
 
-#### PCB板的3D效果如图
+#### 5.1.3 PCB板的3D效果如图
 
 ![STM32](.\IMAGE\STM32.png)
 
-#### BOM报表如下
+#### 5.1.4 BOM报表如下
 
 ![MINI-STM32_页面_3](.\IMAGE\MINI-STM32_页面_3.jpg)
 
@@ -46,91 +44,109 @@ Cortex-M3采用目前主流ARM V7-M架构，相比曾风靡一时的ARM V4T架�
 
 一般情况下（即标准的ISP下载步骤）如果我们想用用串口下载代码，则必须先配置BOOT0为1，BOOT1为0，然后按复位键，最后再通过程序下载代码，下载完以后又需要将BOOT0设置为GND，以便每次复位后都可以运行用户代码。
 
-#### JTAG部分电路如下图：
+#### 5.1.5 JTAG部分电路如下图：
 
-![TIM截图20181202202550](.\IMAGE\TIM截图20181202202550.png)
+<img src=".\IMAGE\TIM截图20181202202550.png" width="500px"/>
 
 这里采用的是标准的JTAG接法，但是STM32还有SWD接口，SWD只需要最少2根线（SWCLK和SWDIO）就可以下载并调试代码了，这同我们使用串口下载代码差不多，而且速度更快，能调试。所以建议在设计产品的时候，可以留出SWD来下载调试代码，而摒弃JTAG。STM32的SWD接口与JTAG是共用的，只要接上JTAG，你就可以使用SWD模式了（其实SWD并不需要JTAG这么多线），JLINK V8/JLINKV7ULINK2以及STLINK等都支持SWD。这里，我们使用SWD模式。
 
-#### 按键
+#### 5.1.6 按键
 
 STM32开发板总共有3个按键，其原理图如下：
 
-![TIM截图20181202203009](.\IMAGE\TIM截图20181202203009.png)
+<img src=".\IMAGE\TIM截图20181202203009.png" width="500px"/>
 
 KEY0和KEY1用作普通按键输入，分别连接在PC1和PC13上，WKUP按键连接到PA0（STM32的WKUP引脚），它除了可以用作普通输入按键外，还可以用作STM32的唤醒输入。
 
-#### LED 
+#### 5.1.7 LED 
 
 STM32开发板上总共有3个LED，其原理图如下：
 
-![2018-12-02_203312](.\IMAGE\2018-12-02_203312.gif)
+<img src=".\IMAGE\2018-12-02_203312.gif" width="500px"/>
 
 其中D2是开发板电源指示灯。LED0和LED1分别接在PA8和PD2上，PA8还可以通过TIM1的通道1的PWM输出来控制D0的亮度。
 
-#### 无线模块
+#### 5.1.8 无线模块
 STM32 开发板板载了NRF24L01无线模块的接口。该接口用来连接NRF24L01等2.4G无线模块，从而实现开发板与其他设备的无线数据传输（注意：NRF24L01不能和蓝牙/WIFI连接）。NRF24L01无线模块的最大传输速度可以达到2Mbps，传输距离最大可以到30米左右（空旷地，无干扰）。有了这个接口，我们就可以做无线通信，以及其他很多的相关应用了。这部分原理图如下：
 
-![TIM截图20181202203608](.\IMAGE\TIM截图20181202203608.png)
+<img src=".\IMAGE\TIM截图20181202203608.png" width="500px"/>
 
-#### SPI FLASH 
+#### 5.1.9 SPI FLASH 
 
 STM32开发板载有SPIFLASH芯片W25Q64，该芯片的容量为8M字节，其原理图如下：
 
-![TIM截图20181202203720](.\IMAGE\TIM截图20181202203720.png)
+<img src=".\IMAGE\TIM截图20181202203720.png" width="500px"/>
 
-#### USB、电源
+#### 5.1.10 USB、电源
 开发板的供电部分还引出了5V（VOUT2）和3.3V（VOUT1）的排针，可以用来为外部设备提供电源或者从外部引入电源，这在很多时候是非常有用的，有时候你突然要一个3.3V的电源，但找半天就是没这样的电源，而我们的板子则可直接向外部提供3.3V电源，有了它，你就可以给外部设备提供3.3V、5V电源了。注意电流不能太大！
 开发板的USB接口（USB）通过独立的MiniUSB头引出，不和USB转串口（USB232）共用，这样不但可以同时使用，还可以给系统提供更大的电流。
 这几个部分的原理图如下：
 
-![TIM截图20181202203911](.\IMAGE\TIM截图20181202203911.png)
+<img src=".\IMAGE\TIM截图20181202203911.png" width="500px"/>
 
-### 2、驱动电路
+### 5.2、驱动电路
 
-
-
-#### 驱动电路原理图如下
+#### 5.2.1 驱动电路原理图如下
 
 ![Drive_Circuit_页面_1](.\IMAGE\Drive_Circuit_页面_1.jpg)
 
-#### PCB如下
+#### 5.2.2 PCB如下
 
 ![Drive_Circuit_页面_2](.\IMAGE\Drive_Circuit_页面_2.jpg)
 
-#### 3D效果图如下
+#### 5.2.3 3D效果图如下
 
 ![Drive](.\IMAGE\Drive.png)
 
-#### BOM报表如下
+#### 5.2.4 BOM报表如下
 
 ![Drive_Circuit_页面_3](.\IMAGE\Drive_Circuit_页面_3.jpg)
 
-### 3、主电路
+#### 5.2.5 电压检测电路
 
-#### 主电路原理图如下
+![1](.\IMAGE\1.png)
+
+将输出电压经过运放·358放大2倍，送入滤波电路后，进行电压限幅后送入单片机AD通道。因为输出电压一直为正，运放不会产生负压，所以358采用单电源供电，减少了-5V电源的产生电路。
+
+#### 5.2.6 驱动电路
+
+![2](.\IMAGE\2.png)
+
+我们在单片机的AD输出端口与IR2110外围模拟电路之间添加了TLP521光耦隔离，增强电路的安全性，减小电压的干扰。
+
+另外，IR2110的不足是不能产生负偏压。在大功率IGBT驱动场合，各路驱动电源独立，集成驱动器一般都能产生-5 V负压，用于增强IGBT关断的可靠性，防止由于密勒效应而造成误导通。IR2110器件内部虽不能产生负压，但可通过外加无源器件产生负压。
+
+在驱动电路中增加由电容和5V稳压管组成的负压电路。其工作原理为：电源电压Vcc为20V。在上电期间，电源通过R8为C13充电，C13保持5V电压。HIN输入高电平时，HO输出20V，加在VG1的电压为15 V。当HIN为低电平时，HO输出0 V，VG1电压为-5V。选择的C13，C14要大于IGBT栅极输入寄生电容Ciss。自举电容充电电路中的二极管D1必须是快恢复二极管，以保证在有限时间内快速导通。
+
+#### 5.2.7 与模拟系统对比
+
+数字系统采用单片机控制，电路需要添加隔离电路，相比较模拟系统的3525芯片及其外围电路，成本较高；而在闭环的PI调试环节，数字系统只需要更改程序中的PI参数，相比较模拟系统更改电位器的电阻值而言，更加的方便快捷。
+
+### 5.3、主电路
+
+#### 5.3.1 主电路原理图如下
 
 ![BUCK_页面_1](.\IMAGE\BUCK_页面_1.jpg)
 
-#### PCB如下
+#### 5.3.2 PCB如下
 
 ![BUCK_页面_2](.\IMAGE\BUCK_页面_2.jpg)
 
-#### 3D效果图如下
+#### 5.3.3 3D效果图如下
 
 ![BUCK](.\IMAGE\BUCK.png)
 
-#### BOM报表如下
+#### 5.3.4BOM报表如下
 
 ![BUCK_页面_3](.\IMAGE\BUCK_页面_3.jpg)
 
-### 4、UART 串口屏幕
+### 5.4、UART 串口屏幕
 
 串口屏定义就是，带串口控制的液晶屏就是串口屏了
 
 详细定义：一套由单片机或PLC带控制器的显示方案，显示方案中的通讯部分由串口通讯，UART串口或者SPI串口等；它由显示驱动板、外壳、LCD液晶显 示屏三部分构成。接收用户单片机串口发送过来的指令，完成在LCD上绘图的所有操作。
 
-### 发展：
+#### 5.4.1 发展：
 
 市面上， 2010年前初期版本的串口屏，都是简单的通过一个上位机软件来进行界面下载，然后发送命令过去把各种需要显示的界面显示出来，以达到所需要的显示效果，触摸方面仅支持上传坐标。
 
@@ -138,7 +154,7 @@ STM32开发板载有SPIFLASH芯片W25Q64，该芯片的容量为8M字节，其�
 
 未来的发展中，串口屏将会出现各种版本，如无线通讯版本，系统组网等等各种强大的功能，只有我们想不到的。
 
-### 应用：
+#### 5.4.2 应用：
 
 广泛应用于工业自动化、电力、电信、环保、医疗、金融、石油、化工、交通、能源、地质、冶金、公共查询与监控等数十个行业和领域，其中，在某些军工及航天领域，凭借可靠、稳定的产品性能已被列入合格供应商名录。完全杜绝部分控制器存在的雪花、乱码、时序不兼容、工作温度范围窄等问题。
 
@@ -148,7 +164,7 @@ STM32开发板载有SPIFLASH芯片W25Q64，该芯片的容量为8M字节，其�
 
 通过配套的组态软件，拥有界面设计所需要的所有控件，用户单片机只要编写一点点代码就可以完成界面设计，真正体现“零代码”
 
-#### 产品特点
+#### 5.4.3 产品特点
 
 1、使用字符串指令
 
@@ -173,7 +189,7 @@ STM32开发板载有SPIFLASH芯片W25Q64，该芯片的容量为8M字节，其�
 
 上位软件编译出来的资源文件就包含了最新的显示模组固件。任何功能性的升级或者bug修复，只需要使用最新的上位软件，编译出资源文件后下载到显示模组，显示模组固件立刻自动升级。上位软件有自动更新功能，只要电脑网络畅通，电脑防火墙没有隔离的软件，每次启动软件的时候软件检测到新版本会提示是否立即升级。
 
-#### 功能简介
+#### 5.4.4 功能简介
 
 + I/O接口：通过软件配置可以吧I/O配置成输入状态或输出状态。另外我们的产品/O可以绑定控件使用。
 
@@ -191,13 +207,13 @@ STM32开发板载有SPIFLASH芯片W25Q64，该芯片的容量为8M字节，其�
 
 + 横竖可控
 
-#### 原理图如下
+#### 5.4.5 原理图如下
 
 ![TJC3224T028_011X_页面_2](.\IMAGE\TJC3224T028_011X_页面_2.jpg)
 
-## 二、软件部分
+## 6、软件部分
 
-### 1、FreeRTOS简介
+### 6.1 FreeRTOS简介
 
 我们看一下FreeRTOS的名字，可以分为两部分：Free和RTOS，Free就是免费的、自由的、不受约束的意思，RTOS全称是Real Time Operating System，中文名就是实时操作系统。可以看出FreeROTS就是一个免费的RTOS类系统。这里要注意，RTOS不是指某一个确定的系统，而是指一类系统。比如UCOS，FreeRTOS，RTX，RT-Thread等这些都是RTOS类操作系统。
 
@@ -207,7 +223,7 @@ STM32开发板载有SPIFLASH芯片W25Q64，该芯片的容量为8M字节，其�
 
 FreeRTOS是RTOS系统的一种，FreeRTOS十分的小巧，可以在资源有限的微控制器中运行，当然了，FreeRTOS不仅局限于在微控制器中使用。但从文件数量上来看FreeRTOS要比UCOSII和UCOSII小的多。
 
-### 2、为什么选择FreeRTOS？
+### 6.2 为什么选择FreeRTOS？
 上面我们说了RTOS类系统有很多，为什么要选择FreeRTOS呢？在UCOS教程中，我们说过学习RTOS首选UCOS，因为UCOS的资料很多，尤其是中文资料！但是FreeRTOS的资料少，而且大多数是英文的，我为何要选择它？原因如下：
 
 1、FreeRTOS免费！这是最重要的一点，UCOs是要收费的，学习RTOS系统的话UCOS是首选，但是做产品的话就要考虑一下成本了。显而易见的，FreeRTOS在此时就是一个很好的选择，当然了也可以选择其他的免费的RTOS系统。
@@ -226,7 +242,7 @@ FreeRTOS是RTOS系统的一种，FreeRTOS十分的小巧，可以在资源有限
 
 ![TIM截图20181202205637](.\IMAGE\TIM截图20181202205637.png)
 
-### 3、FreeRTOS特点
+### 6.3 FreeRTOS特点
 FreeRTOS是一个可裁剪的小型RTOS系统，其特点包括：
 
 + FreeRTOS的内核支持抢占式，合作式和时间片调度。
@@ -253,10 +269,10 @@ FreeRTOS是一个可裁剪的小型RTOS系统，其特点包括：
 + 任务数量不限。
 + 任务优先级不限。
 
-### 4、FreeRTOS任务基础知识
+### 6.4 FreeRTOS任务基础知识
 RTOS系统的核心就是任务管理，FreeRTOS也不例外，而且大多数学习RTOS系统的工程师或者学生主要就是为了使用RTOS的多任务处理功能，初步上手RTOS系统首先必须掌握的也是任务的创建、删除、挂起和恢复等操作，由此可见任务管理的重要性。由于任务相关的知识很多，所以接下来讲解FreeRTOS的任务基础知识。
 
-#### 什么是多任务系统？
+#### 6.4.1 什么是多任务系统？
 
 以前在使用51、AVR、STM32单片机裸机（未使用系统）的时候一般都是在main 函数里面用while（1）做一个大循环来完成所有的处理，即应用程序是一个无限的循环，循环中调用相应的函数完成所需的处理。有时候我们也需要中断中完成一些处理。相对于多任务系统而言，这个就是单任务系统，也称作前后台系统，中断服务函数作为前台程序，大循环while（1）作为后台程序，如图所示：
 
@@ -270,7 +286,7 @@ RTOS系统的核心就是任务管理，FreeRTOS也不例外，而且大多数�
 
 在图中，高优先级的任务可以打断低优先级任务的运行而取得CPU的使用权，这样就保证了那些紧急任务的运行。这样我们就可以为那些对实时性要求高的任务设置一个很高的优先级，比如自动驾驶中的障碍物检测任务等。高优先级的任务执行完成以后重新把CPU的使用权归还给低优先级的任务，这个就是抢占式多任务系统的基本原理。
 
-#### FreeRTOS任务与协程
+#### 6.4.2 FreeRTOS任务与协程
 
 再FreeRTOS中应用既可以使用任务，也可以使用协程（Co-Routine），或者两者混合使用。但是任务和协程使用不同的API函数，因此不能通过队列（或信号量）将数据从任务发送给协程，反之亦然。协程是为那些资源很少的MCU准备的，其开销很小，但是FreeRTOS官方已经不打算再更新协程了，所以本教程只讲解任务。
 
@@ -311,7 +327,7 @@ RTOS系统的核心就是任务管理，FreeRTOS也不例外，而且大多数�
 
 为了降低对RAM的消耗做了很多的限制。
 
-#### 任务状态
+#### 6.4.3 任务状态
 FreeRTOS中的任务永远处于下面几个状态中的某一个：
 
 + 运行态
@@ -324,29 +340,29 @@ FreeRTOS中的任务永远处于下面几个状态中的某一个：
 
 ![TIM截图20181202211151](.\IMAGE\TIM截图20181202211151.png)
 
-#### 任务优先级
+#### 6.4.4 任务优先级
 每个任务都可以分配一个从0~（configMAX_PRIORITIES-1）的优先级，configMAX_PRIORITIES 在文件FreeRTOSConfig.h中有定义，前面我们讲解 FreeRTOS系统配置的时候已经讲过了。如果所使用的硬件平台支持类似计算前导零这样的指令（可以通过该指令选择下一个要运行的任务，Cortex-M处理器是支持该指令的），并且宏configUSE_PORT_OPTIMISED_TASK_SELECTION 也设置为了1，那么宏configMAX_PRIORITIES不能超过32！也就是优先级不能超过32级。其他情况下宏configMAX_PRIORITIES可以为任意值，但是考虑到RAM的消耗，宏configMAX_PRIORITIES最好设置为一个满足应用的最小值。
 
 优先级数字越低表示任务的优先级越低，0的优先级最低，confieMAX_PRIORITIES-1的优先级最高。空闲任务的优先级最低，为0。
 
 FreeRTOS调度器确保处于就绪态或运行态的高优先级的任务获取处理器使用权，换句话说就是处于就绪态的最高优先级的任务才会运行。当宏configUSE_TIME_SLICING定义为1的时候多个任务可以共用一个优先级，数量不限。默认情况下宏configUSE_TIME_SLICING在文件FreeRTOS.h中已经定义为1。此时处于就绪态的优先级相同的任务就会使用时间片轮转调度器获取运行时间。
 
-#### 任务实现
+#### 6.4.5 任务实现
 在使用FreeRTOS的过程中，我们要使用函数xTaskCreate0或xTaskCreateStatic()来创建任务，这两个函数的第一个参数pxTaskCode，就是这个任务的任务函数。什么是任务函数？任务函数就是完成本任务工作的函数。我这个任务要干嘛？要做什么？要完成什么样的功能都是在这个任务函数中实现的。比如我要做个任务，这个任务要点个流水灯，那么这个流水灯的程序就是任务函数中实现的。
 
-#### 任务控制块
+#### 6.4.6 任务控制块
 FreeRTOS的每个任务都有一些属性需要存储，FreeRTOS把这些属性集合到一起用一个结构体来表示，这个结构体叫做任务控制块：TCB_t，在使用函数xTaskCreate0创建任务的时候就会自动的给每个任务分配一个任务控制块。在老版本的FreeRTOS中任务控制块叫做tskTCB，新版本重命名为TCBt，但是本质上还是tskTCB。
 
-#### 任务堆栈
+#### 6.4.7 任务堆栈
 FreeRTOS 之所以能正确的恢复一个任务的运行就是因为有任务堆栈在保驾护航，任务调度器在进行任务切换的时候会将当前任务的现场（CPU寄存器值等）保存在此任务的任务堆栈中，等到此任务下次运行的时候就会先用堆栈中保存的值来恢复现场，恢复现场以后任务就会接着从上次中断的地方开始运行。
 
 创建任务的时候需要给任务指定堆栈，如果使用的函数xTaskCreate0创建任务（动态方法）的话那么任务堆栈就会由函数xTaskCreate0自动创建，后面分析xTaskCreateO的时候会讲解。如果使用函数xTaskCreateStaticO创建任务（静态方法）的话就需要程序员自行定义任务堆栈，然后堆栈首地址作为函数的参数puxStackBuffer传递给函数。
 
-### 5、FreeRTOS队列
+### 6.5 FreeRTOS队列
 
 在实际的应用中，常常会遇到一个任务或者中断服务需要和另外一个任务进行“沟通交流”，这个“沟通交流”的过程其实就是消息传递的过程。在没有操作系统的时候两个应用程序进行消息传递一般使用全局变量的方式，但是如果在使用操作系统的应用中用全局变量来传递消息就会涉及到“资源管理”的问题。FreeRTOS对此提供了一个叫做“队列”的机制来完成任务与任务、任务与中断之间的消息传递。
 
-#### 队列简介
+#### 6.5.1 队列简介
 队列是为了任务与任务、任务与中断之间的通信而准备的，可以在任务与任务、任务与中断之间传递消息，队列中可以存储有限的、大小固定的数据项目。任务与任务、任务与中断之间要交流的数据保存在队列中，叫做队列项目。队列所能保存的最大数据项目数量叫做队列的长度，创建队列的时候会指定数据项目的大小和队列的长度。由于队列用来传递消息的，所以也称为消息队列。FreeRTOS中的信号量的也是依据队列实现的！所以有必要深入的了解FreeRTOS的队列。
 
 ##### 数据存储
@@ -396,9 +412,9 @@ FreeRTOS 之所以能正确的恢复一个任务的运行就是因为有任务�
 
 ![TIM截图20181202212402](.\IMAGE\TIM截图20181202212402.png)
 
-### 6、代码解析
+### 6.6 代码解析
 
-#### mian.c（主函数）
+#### mian.c（主函数） 
 
 ```c
 //引用头文件
@@ -556,7 +572,7 @@ void adc_task(void *pvParameters)
 	while(1)
 	{
 		adcx=Get_Adc_Average(ADC_Channel_1,10);		//ADC通道1采样10次并取平均值
-		flo = (int)adcx*3.3*50/4096;				//串口屏要显示的实际电压值
+		flo = (int)adcx*134.3/4096;				//串口屏要显示的实际电压值
 		CurveCommand(1,0,flo);						//将电压值通过串口发送到串口屏幕显示
 		if ((Message_Queue!=NULL) && (adcx))		//如果队列创建成功并且ADC采集到数据
 		{
@@ -585,10 +601,10 @@ void Keyprocess_task(void *pvParameters)
 				pwm += 90;
 				break;
 			case KEY1_PRES:		//KEY1控制pwm值加180
-				pwm += 180;
+				pwm += 10;
 				break;
 			case KEY0_PRES:		//KEY0控制pwm值减90
-				pwm -= 90;
+				pwm = 556;
 				break;
 		}
 		if (pwm>1440)			//限制pwm的值不能超过1440
@@ -596,7 +612,7 @@ void Keyprocess_task(void *pvParameters)
 			pwm = 1440;
 		}
 		NumberCommand(0,(int)pwm*100/1440);		//串口屏幕显示当前输出电压的值
-		NumberCommand(1,(int)pwm*15/1440);		//串口屏幕显示当前输出占空比的值
+		NumberCommand(1,(int)pwm*24/1440);		//串口屏幕显示当前输出占空比的值
 		if((Key_Queue!=NULL)&&(pwm!=0))   		//消息队列Key_Queue创建成功,并且按键被按下
         {
             err=xQueueSend(Key_Queue,&pwm,10);
@@ -622,11 +638,13 @@ void pid_task(void *pvParameters)
             if(xQueueReceive(Message_Queue,&adcx,portMAX_DELAY) && xQueueReceive(Key_Queue,&pwm,portMAX_DELAY))//请求消息Message_Queue和Key_Queue
             {
 				//闭环
-				V_PID.setpulse = pwm;		//按键给定值
-				V_PID.backpulse = adcx;		//电压反馈值
-				TIM_SetCompare2(TIM3,V_PIDCalc(&V_PID));
+				V_PID.setpulse = pwm*4096/1440;		//按键给定值
+				V_PID.backpulse = adcx/2;		//电压反馈值
+				PWM_VAL1=V_PIDCalc(&V_PID);
+				PWM_VAL2=V_PIDCalc(&V_PID);
 				//开环
-				//TIM_SetCompare2(TIM3,pwm);
+				//PWM_VAL1=pwm;
+				//PWM_VAL2=pwm;
 			}
 		}
 		vTaskDelay(10);      //延时10ms，也就是10个时钟节拍
@@ -685,10 +703,10 @@ unsigned int V_PIDCalc( PID *pp )	//按照课本给定的PID公式进行操作
 
 /////////////////PID调节////////////////////////////////////////////////////
 #define  Pv  0.1  	//0.6//0.1		     振荡 0.05	 振荡至稳定0.1		   
-#define  Iv  0.03	//0.08					      0.04			   0.03		   
+#define  Iv  0.5	//0.08					      0.04			   0.03		   
 #define  Dv  0
 
-#define D_MAX 2900	//占空比输出最大值
+#define D_MAX 620	//占空比输出最大值
 #define D_MIN 0 	//占空比输出最小值
 //定义PID
 typedef struct PID		
@@ -716,36 +734,6 @@ unsigned int V_PIDCalc( PID *pp );
 #include "led.h"
 #include "usart.h"
    	  
-//通用定时器3中断初始化
-//这里时钟选择为APB1的2倍，而APB1为36M
-//arr：自动重装值。
-//psc：时钟预分频数
-//这里使用的是定时器3!
-void TIM3_Int_Init(u16 arr,u16 psc)
-{
-  TIM_TimeBaseInitTypeDef  TIM_TimeBaseStructure;
-	NVIC_InitTypeDef NVIC_InitStructure;
-
-	RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM3, ENABLE); //时钟使能
-
-	TIM_TimeBaseStructure.TIM_Period = arr; //设置在下一个更新事件装入活动的自动重装载寄存器周期的值	 计数到5000为500ms
-	TIM_TimeBaseStructure.TIM_Prescaler =psc; //设置用来作为TIMx时钟频率除数的预分频值  10Khz的计数频率  
-	TIM_TimeBaseStructure.TIM_ClockDivision = 0; //设置时钟分割:TDTS = Tck_tim
-	TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;  //TIM向上计数模式
-	TIM_TimeBaseInit(TIM3, &TIM_TimeBaseStructure); //根据TIM_TimeBaseInitStruct中指定的参数初始化TIMx的时间基数单位
- 
-	TIM_ITConfig(TIM3,TIM_IT_Update,ENABLE ); //使能指定的TIM3中断,允许更新中断
-
-	NVIC_InitStructure.NVIC_IRQChannel = TIM3_IRQn;  //TIM3中断
-	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;  //先占优先级0级
-	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 3;  //从优先级3级
-	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE; //IRQ通道被使能
-	NVIC_Init(&NVIC_InitStructure);  //根据NVIC_InitStruct中指定的参数初始化外设NVIC寄存器
-
-	TIM_Cmd(TIM3, ENABLE);  //使能TIMx外设
-							 
-}
-
 //TIM3 PWM部分初始化 
 //PWM输出初始化
 //arr：自动重装值
@@ -758,15 +746,14 @@ void TIM3_PWM_Init(u16 arr,u16 psc)
 	
 
 	RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM3, ENABLE);	//使能定时器3时钟
- 	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB  | RCC_APB2Periph_AFIO, ENABLE);  //使能GPIO外设和AFIO复用功能模块时钟
-	
-	GPIO_PinRemapConfig(GPIO_PartialRemap_TIM3, ENABLE); //Timer3部分重映射  TIM3_CH2->PB5    
+ 	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA  , ENABLE);  //使能GPIOA模块时钟
+	  
  
-   //设置该引脚为复用输出功能,输出TIM3 CH2的PWM脉冲波形	GPIOB.5
-	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_5; //TIM_CH2
+   //设置该引脚为复用输出功能,输出TIM3 CH1的PWM脉冲波形	GPIOA.6
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_6|GPIO_Pin_7; //TIM_CH2
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;  //复用推挽输出
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-	GPIO_Init(GPIOB, &GPIO_InitStructure);//初始化GPIO
+	GPIO_Init(GPIOA, &GPIO_InitStructure);//初始化GPIO
  
    //初始化TIM3
 	TIM_TimeBaseStructure.TIM_Period = arr; //设置在下一个更新事件装入活动的自动重装载寄存器周期的值
@@ -776,13 +763,19 @@ void TIM3_PWM_Init(u16 arr,u16 psc)
 	TIM_TimeBaseInit(TIM3, &TIM_TimeBaseStructure); //根据TIM_TimeBaseInitStruct中指定的参数初始化TIMx的时间基数单位
 	
 	//初始化TIM3 Channel2 PWM模式	 
-	TIM_OCInitStructure.TIM_OCMode = TIM_OCMode_PWM2; //选择定时器模式:TIM脉冲宽度调制模式2
+	TIM_OCInitStructure.TIM_OCMode = TIM_OCMode_PWM1; //选择定时器模式:TIM脉冲宽度调制模式2
  	TIM_OCInitStructure.TIM_OutputState = TIM_OutputState_Enable; //比较输出使能
 	TIM_OCInitStructure.TIM_OCPolarity = TIM_OCPolarity_High; //输出极性:TIM输出比较极性高
-	TIM_OC2Init(TIM3, &TIM_OCInitStructure);  //根据T指定的参数初始化外设TIM3 OC2
+	TIM_OC1Init(TIM3, &TIM_OCInitStructure);  //根据T指定的参数初始化外设TIM3 OC1
 
-	TIM_OC2PreloadConfig(TIM3, TIM_OCPreload_Enable);  //使能TIM3在CCR2上的预装载寄存器
- 
+	TIM_OC1PreloadConfig(TIM3, TIM_OCPreload_Enable);  //使能TIM3在CCR1上的预装载寄存器
+ 	//上面两句中的OC1确定了是channle几，要是OC2则是channel 2  
+	TIM3->CCR1 = 0;	    //初始化占空比
+
+	TIM_OC2Init(TIM3, &TIM_OCInitStructure);  //根据T指定的参数初始化外设TIM3 OC1
+	TIM_OC2PreloadConfig(TIM3, TIM_OCPreload_Enable);  //使能TIM3在CCR1上的预装载寄存器
+    TIM3->CCR2 = 0;
+
 	TIM_Cmd(TIM3, ENABLE);  //使能TIM3
 	
 }

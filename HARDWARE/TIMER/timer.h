@@ -8,6 +8,9 @@
  ×÷Õß£ºÎ¨ÁµÊâÓê
 ************************************************/
 
+#define PWM_VAL1 TIM3->CCR1
+#define PWM_VAL2 TIM3->CCR2  
+
 void TIM3_Int_Init(u16 arr,u16 psc);
 void TIM3_PWM_Init(u16 arr,u16 psc);
 #endif
